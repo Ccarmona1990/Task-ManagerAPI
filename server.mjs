@@ -4,6 +4,7 @@ import taskRoute from './routes/tasks.mjs';
 import DBconnection from './db/connect.mjs';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import cors from 'cors';
 dotenv.config();
 
 const app = express();
@@ -14,6 +15,9 @@ const URI = process.env.MONGO_URI;
 app.use(express.urlencoded({extended:false}))
 // json parse
 app.use(express.json())
+
+// cors accessability
+app.use(cors({origin: '*'}))
 
 // routes
 app.use('/', greetingRoute)
