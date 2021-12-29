@@ -52,7 +52,7 @@ export const createUser = async (req, res)=>{
     const newUser = req.body; 
     try {
         const newUserInfo = await userTasks.create(newUser);
-        res.status(201).json({newUserInfo})
+        res.status(201).json({success: true, msg: 'The user was successfully created!'})
         
     } catch (error) {
         const {message} = error;
@@ -62,11 +62,10 @@ export const createUser = async (req, res)=>{
 
 export const loginUser = async (req, res)=>{
     const username = req.body;
-    localStorage.setItem('username', username);
     
     try {
         const currentLoggedUser = await userTasks.find({username});
-        res.status(200).json({currentLoggedUser})
+        res.status(200).json({success: true, msg: 'User has logged in'})
     } catch(err){
         const {message} = error;
             res.status(500).json({msg: message, success: false})

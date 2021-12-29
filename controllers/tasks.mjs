@@ -44,7 +44,7 @@ export const createTask = async (req, res)=>{
             const currentLoggedUser = await userTasks.findOne({username: currentUser});
             if(currentLoggedUser){
                 const newTask = await completedTask.create(newTaskInfo);
-                res.status(201).json({newTask});
+                res.status(201).json({success: true, msg: 'Task was successfully created!'});
             } else if (!currentLoggedUser) {
                 return res.status(404).json({msg:`User: ${currentUser} not found in the database.`})
             }
@@ -57,7 +57,7 @@ export const createTask = async (req, res)=>{
             const currentLoggedUser = await userTasks.findOne({username: currentUser});
             if(currentLoggedUser){
                 const newTask = await task.create(newTaskInfo);
-                res.status(201).json({newTask});
+                res.status(201).json({success: true, msg: 'Task was successfully created!'});
             } else if (!currentLoggedUser) {
                 return res.status(404).json({msg:`User: ${currentUser} not found in the database.`})
             }
@@ -91,7 +91,7 @@ export const deleteTask = async (req, res)=>{
         const currentCompletedTask = await completedTask.findOneAndDelete({_id: id});
 
         if(currentTask){
-            return res.status(200).json({currentTask})
+            return res.status(200).json({success: true, msg: 'Task successfully deleted'})
         } else if (currentCompletedTask){
             return res.status(200).json({ currentCompletedTask})
         }
