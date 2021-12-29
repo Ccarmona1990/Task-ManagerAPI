@@ -20,19 +20,7 @@ app.use(express.json())
 
 // cors accessability
 app.use(cors({
-    origin: [
-        'http://localhost:3000/',
-        'http://localhost:3000/task-manager',
-        'http://localhost:8080/',
-        'http://localhost:8080/api/v1/login/', 
-        'http://localhost:8080/api/v1/usertasks/', 
-        'http://localhost:8080/api/v1/tasks/', 
-        'https://taskm-api.herokuapp.com/', 
-        'https://taskm-api.herokuapp.com/api/v1/login/', 
-        'https://taskm-api.herokuapp.com/api/v1/usertasks/', 
-        'https://taskm-api.herokuapp.com/api/v1/tasks/', 
-        'https://t-manager.netlify.app',
-        'https://t-manager.netlify.app/task-manager'],
+    origin: '*',
     methods: ["GET", "POST", "PATCH", "DELETE"]
     })
 );
