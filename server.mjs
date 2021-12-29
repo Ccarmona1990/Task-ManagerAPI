@@ -1,6 +1,8 @@
 import express from "express";
 import greetingRoute from "./routes/greeting.mjs"
 import taskRoute from './routes/tasks.mjs';
+import usertasksRoute from './routes/userTasks.mjs';
+import loginRoute from './routes/loginUserTasks.mjs';
 import DBconnection from './db/connect.mjs';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
@@ -17,11 +19,29 @@ app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 
 // cors accessability
-app.use(cors({origin: '*'}))
+app.use(cors({
+    origin: [
+        'http://localhost:3000/',
+        'http://localhost:3000/task-manager',
+        'http://localhost:8080/',
+        'http://localhost:8080/api/v1/login/', 
+        'http://localhost:8080/api/v1/usertasks/', 
+        'http://localhost:8080/api/v1/tasks/', 
+        'https://taskm-api.herokuapp.com/', 
+        'https://taskm-api.herokuapp.com/api/v1/login/', 
+        'https://taskm-api.herokuapp.com/api/v1/usertasks/', 
+        'https://taskm-api.herokuapp.com/api/v1/tasks/', 
+        'https://t-manager.netlify.app',
+        'https://t-manager.netlify.app/task-manager'],
+    methods: ["GET", "POST", "PATCH", "DELETE"]
+    })
+);
 
 // routes
 app.use('/', greetingRoute)
 app.use('/api/v1/tasks', taskRoute);
+app.use('/api/v1/usertasks',usertasksRoute);
+app.use('/api/v1/login',loginRoute);
 
 // http request logger
 app.use(morgan('tiny'))
@@ -34,7 +54,6 @@ const start = async ()=>{
         console.log(err);
     }
 }
-
 start();
 
 

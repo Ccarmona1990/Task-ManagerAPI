@@ -1,9 +1,9 @@
 import express from 'express';
-import {getAllTask, getTask, createTask, updateTask, deleteTask} from '../controllers/tasks.mjs';
+import {getAllTask,createTask, updateTask, deleteTask} from '../controllers/tasks.mjs';
 const router = express.Router();
 
-
-router.route('/').get(getAllTask).post(createTask);
-router.route('/:id').get(getTask).patch(updateTask).delete(deleteTask);
+router.route('/').post(createTask);
+router.route('/:id').patch(updateTask).delete(deleteTask);
+router.route('/:username').get(getAllTask);
 
 export default router
