@@ -3,19 +3,23 @@ import {task, completedTask, userTasks} from "../models/task.mjs";
 export const getAllTask = async (req, res)=>{
     const username = req.params.username;
     try {
-        const currentLoggedUser = await userTasks.findOne({username: username});
+        const currentLoggedUser = await userTasks.findOne({username});
         const currentLoggedEmail = await userTasks.findOne({email: username});
 
         if(currentLoggedUser){
             const tasks = await task.find({username});
             const completedtasks = await completedTask.find({username})
             res.status(200).json({tasks, completedtasks})
-        }
-        if(currentLoggedEmail){
+        } else if(currentLoggedEmail){
             const tasks = await task.find({email: username});
             const completedtasks = await completedTask.find({email: username})
             res.status(200).json({tasks, completedtasks})
         }
+        if (!currentLoggedUser) {
+                if(!currentLoggedEmail){
+                    return res.status(404).json({msg:`User was not found in the database.`})
+                }
+            }
 
     } catch (error) {
         const {message} = error;
