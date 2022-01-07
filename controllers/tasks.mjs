@@ -3,10 +3,17 @@ import {task, completedTask, userTasks} from "../models/task.mjs";
 export const getAllTask = async (req, res)=>{
     const username = req.params.username;
     try {
-        const currentLoggedUser = await userTasks.findOne({username});
+        const currentLoggedUser = await userTasks.findOne({username: username});
+        const currentLoggedEmail = await userTasks.findOne({email: username});
+
         if(currentLoggedUser){
             const tasks = await task.find({username});
             const completedtasks = await completedTask.find({username})
+            res.status(200).json({tasks, completedtasks})
+        }
+        if(currentLoggedEmail){
+            const tasks = await task.find({email: username});
+            const completedtasks = await completedTask.find({email: username})
             res.status(200).json({tasks, completedtasks})
         }
 
@@ -38,15 +45,19 @@ export const getTask = async (req, res)=>{
 export const createTask = async (req, res)=>{
     const newTaskInfo = req.body;
     const currentUser = req.body.username;
+    const currentEmail = req.body.email;
     
     if(newTaskInfo?.isTaskCompleted){
         try{
             const currentLoggedUser = await userTasks.findOne({username: currentUser});
-            if(currentLoggedUser){
+            const currentLoggedEmail = await userTasks.findOne({email: currentEmail});
+            if(currentLoggedUser || currentLoggedEmail){
                 const newTask = await completedTask.create(newTaskInfo);
                 res.status(201).json({success: true, msg: 'Task was successfully created!'});
             } else if (!currentLoggedUser) {
-                return res.status(404).json({msg:`User: ${currentUser} not found in the database.`})
+                if(!currentLoggedEmail){
+                    return res.status(404).json({msg:`User: ${currentUser} not found in the database.`})
+                }
             }
         } catch (error) {
             const {message} = error;
@@ -55,11 +66,14 @@ export const createTask = async (req, res)=>{
     } else {
         try {
             const currentLoggedUser = await userTasks.findOne({username: currentUser});
-            if(currentLoggedUser){
+            const currentLoggedEmail = await userTasks.findOne({email: currentEmail});
+            if(currentLoggedUser|| currentLoggedEmail){
                 const newTask = await task.create(newTaskInfo);
                 res.status(201).json({success: true, msg: 'Task was successfully created!'});
             } else if (!currentLoggedUser) {
-                return res.status(404).json({msg:`User: ${currentUser} not found in the database.`})
+                if (!currentLoggedEmail){
+                    return res.status(404).json({msg:`User was not found in the database.`})
+                }
             }
         } catch (error) {
             const {message} = error;

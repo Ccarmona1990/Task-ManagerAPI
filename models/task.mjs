@@ -18,13 +18,20 @@ const TaskSchema = new mongoose.Schema({
     username:{
         type: String,
         trim: true
+    },
+    email:{
+        type: String,
+        trim: true
     }
 })
 
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
-        unique: true,
+        trim: true
+    },
+    email: {
+        type: String,
         trim: true
     },
     tasks:{ 
