@@ -47,6 +47,16 @@ export const getUserTask = async (req, res)=>{
         }
     }
 };
+export const getUser = async (req, res)=>{
+    const credential = req.params.credential;
+
+    const username = await userTasks.findOne({username: credential})
+    const email = await userTasks.findOne({email: credential})
+    res.status(200).json({
+        success: true, 
+        currentUser: username ? username : email
+    })
+}
 
 export const createUser = async (req, res)=>{
     const newUser = req.body; 
